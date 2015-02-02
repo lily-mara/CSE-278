@@ -3,7 +3,7 @@ OPTS=-ggdb
 COMP=$(CC) $(OPTS)
 
 FILES=lab2.c
-EXECUTABLE=lab2
+EXECUTABLE=lab2.out
 
 $(EXECUTABLE) : $(FILES)
 	$(COMP) -o $(EXECUTABLE) $(FILES)
