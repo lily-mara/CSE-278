@@ -1,8 +1,7 @@
 #include<stdbool.h>
 #include<string.h>
 #include<stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include<stdlib.h>
 
 typedef enum { INT, FLOAT, TYPE_ERROR } type_t;
 typedef enum { ADD, SUB, DIV, MULT, OP_ERROR } op_t;
@@ -12,9 +11,17 @@ type_t parse_type_choice(const char*);
 op_t parse_op_choice(const char*);
 unsigned int power(int, int);
 int bin_to_dec(char*);
+bool is_whitespace(char);
+char* trim_whitespace(char*);
 
 int main() {
-	char *input = "101000010010010";
+	char *buffer;
+	int read_status;
+	size_t len;
+
+	read_status = getline(&buffer, &len, stdin);
+	char *input = trim_whitespace(buffer);
+
 	if (valid_binary(input)) {
 		printf("Input <%s> is valid binary literal\n", input);
 	} else {
@@ -107,4 +114,38 @@ unsigned int power(int base, int power) {
 	}
 
 	return total;
+}
+
+// Note: This function returns a pointer to a substring of the original string.
+// If the given string was allocated dynamically, the caller must not overwrite
+// that pointer with the returned value, since the original pointer must be
+// deallocated using the same allocator with which it was allocated.  The return
+// value must NOT be deallocated using free() etc.
+char *trim_whitespace(char *str)
+{
+	char *end;
+
+	// Trim leading space
+	while(is_whitespace(*str)) {
+		str++;
+	}
+
+	if(*str == 0) {  // All spaces?
+		return str;
+	}
+
+	// Trim trailing space
+	end = str + strlen(str) - 1;
+	while(end > str && is_whitespace(*end)) {
+		end--;
+	}
+
+	// Write new null terminator
+	*(end+1) = 0;
+
+	return str;
+}
+
+inline bool is_whitespace(char x) {
+	return x == ' ' || x == '\n' || x == '\t';
 }
