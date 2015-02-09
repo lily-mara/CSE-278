@@ -4,6 +4,7 @@
 #include<stdbool.h>
 
 char** split(char*, char);
+bool valid_binary(const char*);
 
 int main() {
 	char *input;
@@ -16,7 +17,7 @@ int main() {
 	char *test_string = "hello how are you doing today?";
 	char **splitted = split(test_string, ' ');
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		printf("splitted[%d] = %s\n", i, splitted[i]);
 		free(splitted[i]);
 	}
