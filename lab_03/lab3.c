@@ -3,27 +3,42 @@
 #include<string.h>
 #include<stdbool.h>
 
-char** split(char*, char);
+typedef struct {
+	int num_splits;
+	char** array;
+} split_t;
+
+split_t *split(char*, char);
 bool valid_binary(const char*);
+char* trim_whitespace(char*);
+bool is_whitespace(char);
 
 int main() {
-	char *input;
 	char **output;
 
-	//printf("The starting memory address of the input is:__\n");
-	//printf("The starting memory address of the output is:__\n");
-	//printf("The results in octal are:__\n");
+	printf("Enter two binary strings to convert:\n");
 
-	char *test_string = "hello how are you doing today?";
-	char **splitted = split(test_string, ' ');
+	char *buffer = NULL;
+	int read_status;
+	size_t len;
 
-	for (int i = 0; i < 6; i++) {
-		printf("splitted[%d] = %s\n", i, splitted[i]);
-		free(splitted[i]);
+	read_status = getline(&buffer, &len, stdin);
+	char *input = trim_whitespace(buffer);
+
+	split_t *binary_nums = split(input, ' ');
+
+	for (int i = 0; i < binary_nums->num_splits; i++) {
+		if (!valid_binary(binary_nums->array[i])) {
+			printf("Input <%s> is not a valid binary literal\n", binary_nums->array[i]);
+			return 1;
+		}
 	}
 
-	free(splitted);
+	printf(" The starting memory address of the input is: %p\n", input);
+	printf("The starting memory address of the output is: %p\n", output);
+	printf("                    The results in octal are:__\n");
 
+	free(buffer);
 	return 0;
 }
 
@@ -36,7 +51,7 @@ bool valid_binary(const char *to_check) {
 	return true;
 }
 
-char** split(char* input, char splitter) {
+split_t* split(char* input, char splitter) {
 	int count = 0;
 	int input_size = strlen(input);
 
@@ -68,5 +83,38 @@ char** split(char* input, char splitter) {
 		}
 	}
 
-	return output;
+	split_t *output_split = (split_t*) calloc(1, sizeof(split_t));
+	output_split->num_splits = output_size;
+	output_split->array = output;
+
+	return output_split;
+}
+
+char *trim_whitespace(char *str)
+{
+	char *end;
+
+	// Trim leading space
+	while(is_whitespace(*str)) {
+		str++;
+	}
+
+	if(*str == 0) {  // All spaces?
+		return str;
+	}
+
+	// Trim trailing space
+	end = str + strlen(str) - 1;
+	while(end > str && is_whitespace(*end)) {
+		end--;
+	}
+
+	// Write new null terminator
+	*(end+1) = 0;
+
+	return str;
+}
+
+inline bool is_whitespace(char x) {
+	return x == ' ' || x == '\n' || x == '\t';
 }
