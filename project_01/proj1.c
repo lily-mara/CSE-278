@@ -15,7 +15,7 @@ bool is_whitespace(char);
 char* trim_whitespace(char*);
 
 int main() {
-	char *buffer;
+	char *buffer = NULL;
 	int read_status;
 	size_t len;
 
@@ -28,6 +28,8 @@ int main() {
 		printf("Input <%s> is not a valid binary literal\n", input);
 		return 1;
 	}
+
+	free(buffer);
 }
 
 /*
