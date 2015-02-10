@@ -15,6 +15,7 @@ bool is_whitespace(char);
 void convert_to_octal(char**, char**);
 char* to_octal(const char*);
 char to_decimal(char*);
+char* strjoin(split_t *, char);
 
 int main() {
 	char **output;
@@ -39,9 +40,14 @@ int main() {
 
 	convert_to_octal(binary_nums->array, output);
 
+	split_t *out_split = calloc(1, sizeof(split_t));
+	out_split->num_splits = binary_nums->num_splits;
+	out_split->array = output;
+	char *joined = strjoin(out_split, ' ');
+
 	//printf(" The starting memory address of the input is: %p\n", buffer);
 	//printf("The starting memory address of the output is: %p\n", output);
-	printf("                    The results in octal are: %s\n", *output);
+	printf("                    The results in octal are: %s\n", joined);
 
 	for (int i = 0; i < binary_nums->num_splits; i++) {
 		free(output[i]);
@@ -51,6 +57,8 @@ int main() {
 	free(buffer);
 	free(binary_nums->array);
 	free(binary_nums);
+	free(out_split);
+	free(joined);
 
 	return 0;
 }
@@ -191,4 +199,27 @@ char *trim_whitespace(char *str) {
 
 inline bool is_whitespace(char x) {
 	return x == ' ' || x == '\n' || x == '\t';
+}
+
+char* strjoin(split_t *in, char joiner) {
+	size_t length = in->num_splits;
+	for (int i = 0; i < in->num_splits; i++) {
+		length += strlen(in->array[i]);
+	}
+
+	char *out = calloc(length, sizeof(char));
+	int inner_index = 0;
+	int outer_index = 0;
+	for (int i = 0; i < length; i++) {
+		if (inner_index >= strlen(in->array[outer_index])) {
+			inner_index = 0;
+			outer_index++;
+			out[i] = joiner;
+		} else {
+			out[i] = in->array[outer_index][inner_index];
+			inner_index++;
+		}
+	}
+
+	return out;
 }
