@@ -43,7 +43,15 @@ int main() {
 	//printf("The starting memory address of the output is: %p\n", output);
 	printf("                    The results in octal are: %s\n", *output);
 
+	for (int i = 0; i < binary_nums->num_splits; i++) {
+		free(output[i]);
+		free(binary_nums->array[i]);
+	}
+
 	free(buffer);
+	free(binary_nums->array);
+	free(binary_nums);
+
 	return 0;
 }
 
@@ -84,6 +92,8 @@ char* to_octal(const char *input) {
 		out[i] = to_decimal(temp);
 	}
 
+	free(temp);
+	free(binary);
 	return out;
 }
 
