@@ -12,6 +12,9 @@ split_t *split(char*, char);
 bool valid_binary(const char*);
 char* trim_whitespace(char*);
 bool is_whitespace(char);
+void convert_to_octal(char**, char**);
+char* to_octal(const char*);
+char to_decimal(char*);
 
 int main() {
 	char **output;
@@ -34,12 +37,74 @@ int main() {
 		}
 	}
 
-	printf(" The starting memory address of the input is: %p\n", input);
-	printf("The starting memory address of the output is: %p\n", output);
-	printf("                    The results in octal are:__\n");
+	convert_to_octal(binary_nums->array, output);
+
+	//printf(" The starting memory address of the input is: %p\n", buffer);
+	//printf("The starting memory address of the output is: %p\n", output);
+	printf("                    The results in octal are: %s\n", *output);
 
 	free(buffer);
 	return 0;
+}
+
+void convert_to_octal(char *input[2], char** output) {
+	for (int i = 0; i < 2; i++) {
+		output[i] = to_octal(input[i]);
+	}
+}
+
+char* to_octal(const char *input) {
+	size_t in_length = strlen(input);
+
+	int extra_zeroes = 3-in_length%3;
+	if (extra_zeroes == 3) {
+		extra_zeroes = 0;
+	}
+
+	size_t bin_length = in_length + extra_zeroes;
+
+	int out_length = bin_length/3;
+
+	char* binary = calloc(bin_length+1, sizeof(char));
+	char* out = calloc(out_length+1, sizeof(char));
+
+	for (int i = 0; i < bin_length; i++) {
+		if (i < extra_zeroes) {
+			binary[i] = '0';
+		} else {
+			binary[i] = input[i-extra_zeroes];
+		}
+	}
+
+	char* temp = calloc(4, sizeof(char));
+	temp[3] = '\0';
+
+	for (int i = 0; i < out_length; i++) {
+		strncpy(temp, binary+i*3, 3);
+		out[i] = to_decimal(temp);
+	}
+
+	return out;
+}
+
+char to_decimal(char *binary) {
+	if (!strcmp("000", binary))
+		return '0';
+	if (!strcmp("001", binary))
+		return '1';
+	if (!strcmp("010", binary))
+		return '2';
+	if (!strcmp("011", binary))
+		return '3';
+	if (!strcmp("100", binary))
+		return '4';
+	if (!strcmp("101", binary))
+		return '5';
+	if (!strcmp("110", binary))
+		return '6';
+	if (!strcmp("111", binary))
+		return '7';
+	return '-';
 }
 
 bool valid_binary(const char *to_check) {
@@ -90,8 +155,7 @@ split_t* split(char* input, char splitter) {
 	return output_split;
 }
 
-char *trim_whitespace(char *str)
-{
+char *trim_whitespace(char *str) {
 	char *end;
 
 	// Trim leading space
