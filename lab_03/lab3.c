@@ -45,8 +45,8 @@ int main() {
 	out_split->array = output;
 	char *joined = strjoin(out_split, ' ');
 
-	//printf(" The starting memory address of the input is: %p\n", buffer);
-	//printf("The starting memory address of the output is: %p\n", output);
+	printf(" The starting memory address of the input is: %p\n", &buffer);
+	printf("The starting memory address of the output is: %p\n", &output);
 	printf("                    The results in octal are: %s\n", joined);
 
 	for (int i = 0; i < binary_nums->num_splits; i++) {
