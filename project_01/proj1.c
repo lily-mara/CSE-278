@@ -15,13 +15,34 @@ bool is_whitespace(char);
 char* trim_whitespace(char*);
 char* get_str();
 char* get_binary(char*);
+type_t get_type();
 
 int main() {
 	char *num1 = get_binary("first");
 	char *num2 = get_binary("second");
+	type_t number_format = get_type();
 
 	free(num1);
 	free(num2);
+}
+
+type_t get_type() {
+	printf("Enter the binary numeric format (int or float)\n");
+	char* type;
+
+	type = get_str();
+
+	while (parse_type_choice(type) == TYPE_ERROR) {
+		printf("Input <%s> is not a valid numeric format\n", type);
+		printf("Enter the binary numeric format (int or float)\n");
+		free(type);
+		type = get_str();
+	}
+
+	type_t return_type = parse_type_choice(type);
+	free(type);
+
+	return return_type;
 }
 
 char* get_binary(char *number) {
