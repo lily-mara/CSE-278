@@ -73,6 +73,19 @@ void run_int(char* str1, char* str2, op_t op) {
 void run_float(char* str1, char* str2, op_t op) {
 }
 
+int bin2int(char* input) {
+	size_t bits = strlen(input);
+	int result = 0;
+
+	for (int i = 0; i < bits; i++) {
+		if (input[i] == '1') {
+			result += power(2, bits - i - 1);
+		}
+	}
+
+	return result;
+}
+
 op_t get_op() {
 	printf("Enter the calculation to perform (add, sub, mul, div):\n");
 	char *op_str;
