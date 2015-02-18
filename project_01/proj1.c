@@ -9,7 +9,7 @@ typedef enum { ADD, SUB, DIV, MULT, OP_ERROR } op_t;
 bool valid_binary(const char*);
 type_t parse_type_choice(const char*);
 op_t parse_op_choice(const char*);
-unsigned int power(int, int);
+int power(int, int);
 int bin_to_dec(char*);
 bool is_whitespace(char);
 char* trim_whitespace(char*);
@@ -108,7 +108,7 @@ int bin_to_dec(char *binary) {
 	return sum;
 }
 
-unsigned int power(int base, int power) {
+int power(int base, int power) {
 	int total = 1;
 
 	for (int i = 0; i < power; i++) {
