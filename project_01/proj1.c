@@ -13,23 +13,33 @@ int power(int, int);
 int bin_to_dec(char*);
 bool is_whitespace(char);
 char* trim_whitespace(char*);
+char* get_str();
 
 int main() {
-	char *buffer = NULL;
-	int read_status;
-	size_t len;
+	char *num1 = get_str();
 
-	read_status = getline(&buffer, &len, stdin);
-	char *input = trim_whitespace(buffer);
-
-	if (valid_binary(input)) {
-		printf("Input <%s> is valid binary literal\n", input);
+	if (valid_binary(num1)) {
+		printf("Input <%s> is valid binary literal\n", num1);
 	} else {
-		printf("Input <%s> is not a valid binary literal\n", input);
+		printf("Input <%s> is not a valid binary literal\n", num1);
 		return 1;
 	}
+	free(num1);
+}
+
+char* get_str() {
+	char *buffer = NULL;
+	char *output;
+	size_t len;
+
+	int read_status = getline(&buffer, &len, stdin);
+	char *input = trim_whitespace(buffer);
+
+	output = calloc(strlen(input) + 1, sizeof(char));
+	strcpy(output, input);
 
 	free(buffer);
+	return output;
 }
 
 /*
