@@ -33,6 +33,7 @@ char* get_binary(char *number) {
 	while (!valid_binary(num)) {
 		printf("Input <%s> is not a valid binary literal\n", num);
 		printf("Enter the %s number in binary format:\n", number);
+		free(num);
 		num = get_str();
 	}
 
