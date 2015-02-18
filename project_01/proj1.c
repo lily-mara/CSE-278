@@ -17,6 +17,10 @@ char* get_str();
 char* get_binary(char*);
 type_t get_type();
 op_t get_op();
+void run_int(char*, char*, op_t);
+void run_float(char*, char*, op_t);
+int bin2int(char*);
+float bin2float(char*);
 
 int main() {
 	char *num1 = get_binary("first");
@@ -25,8 +29,48 @@ int main() {
 	type_t number_format = get_type();
 	op_t op = get_op();
 
+	switch (number_format) {
+		case INT:
+			run_int(num1, num2, op);
+			break;
+		case FLOAT:
+			run_float(num1, num2, op);
+			break;
+		case TYPE_ERROR:
+			break;
+	}
+
 	free(num1);
 	free(num2);
+
+	printf("Goodbye!\n");
+}
+
+void run_int(char* str1, char* str2, op_t op) {
+	int num1 = bin2int(str1);
+	int num2 = bin2int(str2);
+
+	float result;
+
+	switch (op) {
+		case ADD:
+			result = num1 + num2;
+			break;
+		case SUB:
+			result = num1 - num2;
+			break;
+		case MULT:
+			result = num1 * num2;
+			break;
+		case DIV:
+			result = num1 / num2;
+			break;
+		case OP_ERROR:
+			break;
+	}
+}
+
+void run_float(char* str1, char* str2, op_t op) {
 }
 
 op_t get_op() {
