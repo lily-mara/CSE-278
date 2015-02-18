@@ -14,17 +14,29 @@ int bin_to_dec(char*);
 bool is_whitespace(char);
 char* trim_whitespace(char*);
 char* get_str();
+char* get_binary(char*);
 
 int main() {
-	char *num1 = get_str();
+	char *num1 = get_binary("first");
+	char *num2 = get_binary("second");
 
-	if (valid_binary(num1)) {
-		printf("Input <%s> is valid binary literal\n", num1);
-	} else {
-		printf("Input <%s> is not a valid binary literal\n", num1);
-		return 1;
-	}
 	free(num1);
+	free(num2);
+}
+
+char* get_binary(char *number) {
+	printf("Enter the %s number in binary format:\n", number);
+	char* num;
+
+	num = get_str();
+
+	while (!valid_binary(num)) {
+		printf("Input <%s> is not a valid binary literal\n", num);
+		printf("Enter the %s number in binary format:\n", number);
+		num = get_str();
+	}
+
+	return num;
 }
 
 char* get_str() {
