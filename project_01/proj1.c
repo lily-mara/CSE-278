@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include<assert.h>
 
 typedef enum { INT, FLOAT, TYPE_ERROR } type_t;
 typedef enum { ADD, SUB, DIV, MULT, OP_ERROR } op_t;
@@ -21,6 +22,7 @@ void run_int(char*, char*, op_t);
 void run_float(char*, char*, op_t);
 int bin2int(char*);
 float bin2float(char*);
+void test_bin2int();
 
 int main() {
 	char *num1 = get_binary("first");
@@ -44,6 +46,23 @@ int main() {
 	free(num2);
 
 	printf("Goodbye!\n");
+}
+
+
+void test_bin2int() {
+	assert(bin2int("00000000") == 0);
+	assert(bin2int("01111111") == 127);
+	assert(bin2int("01111110") == 126);
+	assert(bin2int("00000010") == 2);
+	assert(bin2int("00000001") == 1);
+	assert(bin2int("00000000") == 0);
+	assert(bin2int("11111111") == -1);
+	assert(bin2int("11111110") == -2);
+	assert(bin2int("10000010") == -126);
+	assert(bin2int("10000001") == -127);
+	assert(bin2int("10000000") == -128);
+	assert(bin2int("11111111111111111111111111111111") == -1);
+	assert(bin2int("11111111111111111111111111110100") == -12);
 }
 
 void run_int(char* str1, char* str2, op_t op) {
@@ -77,13 +96,29 @@ int bin2int(char* input) {
 	size_t bits = strlen(input);
 	int result = 0;
 
+	bool negative = input[0] == '1';
+	char one = '1';
+	if (negative) {
+		one = '0';
+	}
+
 	for (int i = 0; i < bits; i++) {
-		if (input[i] == '1') {
+		if (input[i] == one) {
 			result += power(2, bits - i - 1);
 		}
 	}
 
+	if (negative) {
+		result *= -1;
+		result -= 1;
+	}
+
 	return result;
+}
+
+float bin2float(char* input) {
+	assert(strlen(input) == 32);
+	return 0;
 }
 
 op_t get_op() {
