@@ -16,14 +16,36 @@ char* trim_whitespace(char*);
 char* get_str();
 char* get_binary(char*);
 type_t get_type();
+op_t get_op();
 
 int main() {
 	char *num1 = get_binary("first");
 	char *num2 = get_binary("second");
+
 	type_t number_format = get_type();
+	op_t op = get_op();
 
 	free(num1);
 	free(num2);
+}
+
+op_t get_op() {
+	printf("Enter the calculation to perform (add, sub, mul, div):\n");
+	char *op_str;
+
+	op_str = get_str();
+	op_t op;
+
+	while ((op = parse_op_choice(op_str)) == OP_ERROR) {
+		printf("Input <%s> is not a valid operator name\n", op_str);
+		printf("Enter the calculation to perform (add, sub, mul, div):\n");
+
+		free(op_str);
+		op_str = get_str();
+	}
+
+	free(op_str);
+	return op;
 }
 
 type_t get_type() {
