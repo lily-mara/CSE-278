@@ -149,7 +149,23 @@ char *int2bin(int input) {
 }
 
 char *bin2hex(char *input) {
-	return "";
+	char *output = calloc(9, sizeof(char));
+	output[8] = 0;
+	unsigned int hexnum;
+	char temp[4];
+
+	for(int i = 0;i < 8;++i) {
+		hexnum = 0;
+
+		strncpy(temp, input + (i * 4), 4);
+		for(int j = 0;j < 4;++j) {
+			hexnum += (temp[j] - '0') << (3 - j);
+		}
+
+		sprintf(output + i, "%X", hexnum);
+	}
+
+	return output;
 }
 
 int bin2int(char* input) {
