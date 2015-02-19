@@ -23,6 +23,11 @@ void run_float(char*, char*, op_t);
 int bin2int(char*);
 float bin2float(char*);
 void test_bin2int();
+char* int2bin(int);
+char* float2bin(float);
+char* bin2hex(char*);
+char* bin2oct(char*);
+void test_int2bin();
 
 int main() {
 	char *num1 = get_binary("first");
@@ -65,31 +70,89 @@ void test_bin2int() {
 	assert(bin2int("11111111111111111111111111110100") == -12);
 }
 
+void test_int2bin() {
+	assert(strcmp("00000000000000000000000000000000", int2bin(0)) == 0);
+	assert(strcmp("00000000000000000000000001111111", int2bin(127)) == 0);
+	assert(strcmp("00000000000000000000000001111110", int2bin(126)) == 0);
+	assert(strcmp("00000000000000000000000000000010", int2bin(2)) == 0);
+	assert(strcmp("00000000000000000000000000000001", int2bin(1)) == 0);
+	assert(strcmp("11111111111111111111111111111111", int2bin(-1)) == 0);
+	assert(strcmp("11111111111111111111111111111110", int2bin(-2)) == 0);
+	assert(strcmp("11111111111111111111111110000010", int2bin(-126)) == 0);
+	assert(strcmp("11111111111111111111111110000001", int2bin(-127)) == 0);
+	assert(strcmp("11111111111111111111111110000000", int2bin(-128)) == 0);
+}
+
 void run_int(char* str1, char* str2, op_t op) {
 	int num1 = bin2int(str1);
 	int num2 = bin2int(str2);
 
-	float result;
+	int result;
+	char op_char;
 
 	switch (op) {
 		case ADD:
 			result = num1 + num2;
+			op_char = '+';
 			break;
 		case SUB:
 			result = num1 - num2;
+			op_char = '-';
 			break;
 		case MULT:
 			result = num1 * num2;
+			op_char = '*';
 			break;
 		case DIV:
 			result = num1 / num2;
+			op_char = '/';
 			break;
 		case OP_ERROR:
 			break;
+			op_char = '#';
 	}
+
+	char *bin_result = int2bin(result);
+	char *oct_result = bin2oct(bin_result);
+	char *hex_result = bin2hex(bin_result);
+
+	printf("The result for %d %c %d is:\n", num1, op_char, num2);
+	printf("Binary = %s\n", bin_result);
+	printf("Octal = %s\n", oct_result);
+	printf("Decimal = %d\n", result);
+	printf("Hex = %s\n", hex_result);
+
+	free(bin_result);
+	free(hex_result);
+	free(oct_result);
 }
 
 void run_float(char* str1, char* str2, op_t op) {
+}
+
+char *int2bin(int input) {
+	input = input >> (32 - sizeof(int)*8);
+	char* result = calloc(33, sizeof(char));
+	result[32] = 0;
+
+	for (int i = 0; i < 32; i++) {
+		int bit = (input >> (31-i)) & 1;
+		if (bit) {
+			result[i] = '1';
+		} else {
+			result[i] = '0';
+		}
+	}
+
+	return result;
+}
+
+char *bin2hex(char *input) {
+	return "";
+}
+
+char *bin2oct(char *input) {
+	return "";
 }
 
 int bin2int(char* input) {
@@ -118,6 +181,17 @@ int bin2int(char* input) {
 
 float bin2float(char* input) {
 	assert(strlen(input) == 32);
+	bool negative = input[0] == '1';
+
+	char* exponent_str = calloc(9, sizeof(char));
+	char* significand_str = calloc(24, sizeof(char));
+
+	exponent_str[8] = '\0';
+	significand_str[23] = '\0';
+
+	strncpy(exponent_str, input + 1, 8);
+	strncpy(significand_str, input + 1, 8);
+
 	return 0;
 }
 
