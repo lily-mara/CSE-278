@@ -28,6 +28,7 @@ char* float2bin(float);
 char* bin2hex(char*);
 char* bin2oct(char*);
 void test_int2bin();
+char oct2ascii(char*);
 
 int main() {
 	char *num1 = get_binary("first");
@@ -148,10 +149,6 @@ char *int2bin(int input) {
 }
 
 char *bin2hex(char *input) {
-	return "";
-}
-
-char *bin2oct(char *input) {
 	return "";
 }
 
@@ -382,4 +379,60 @@ char *trim_whitespace(char *str)
 
 inline bool is_whitespace(char x) {
 	return x == ' ' || x == '\n' || x == '\t';
+}
+
+char* bin2oct(char *input) {
+	size_t in_length = strlen(input);
+
+	int extra_zeroes = 3-in_length%3;
+	if (extra_zeroes == 3) {
+		extra_zeroes = 0;
+	}
+
+	size_t bin_length = in_length + extra_zeroes;
+
+	int out_length = bin_length/3;
+
+	char* binary = calloc(bin_length+1, sizeof(char));
+	char* out = calloc(out_length+1, sizeof(char));
+
+	for (int i = 0; i < bin_length; i++) {
+		if (i < extra_zeroes) {
+			binary[i] = '0';
+		} else {
+			binary[i] = input[i-extra_zeroes];
+		}
+	}
+
+	char* temp = calloc(4, sizeof(char));
+	temp[3] = '\0';
+
+	for (int i = 0; i < out_length; i++) {
+		strncpy(temp, binary+i*3, 3);
+		out[i] = oct2ascii(temp);
+	}
+
+	free(temp);
+	free(binary);
+	return out;
+}
+
+char oct2ascii(char *binary) {
+	if (!strcmp("000", binary))
+		return '0';
+	if (!strcmp("001", binary))
+		return '1';
+	if (!strcmp("010", binary))
+		return '2';
+	if (!strcmp("011", binary))
+		return '3';
+	if (!strcmp("100", binary))
+		return '4';
+	if (!strcmp("101", binary))
+		return '5';
+	if (!strcmp("110", binary))
+		return '6';
+	if (!strcmp("111", binary))
+		return '7';
+	return '-';
 }
