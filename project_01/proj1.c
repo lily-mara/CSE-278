@@ -129,6 +129,51 @@ void run_int(char* str1, char* str2, op_t op) {
 }
 
 void run_float(char* str1, char* str2, op_t op) {
+	float num1 = bin2float(str1);
+	float num2 = bin2float(str2);
+
+	float result;
+	char op_char;
+
+	switch (op) {
+		case ADD:
+			result = num1 + num2;
+			op_char = '+';
+			break;
+		case SUB:
+			result = num1 - num2;
+			op_char = '-';
+			break;
+		case MULT:
+			result = num1 * num2;
+			op_char = '*';
+			break;
+		case DIV:
+			result = num1 / num2;
+			op_char = '/';
+			break;
+		case OP_ERROR:
+			break;
+			op_char = '#';
+	}
+
+	char *bin_result = float2bin(result);
+	char *oct_result = bin2oct(bin_result);
+	char *hex_result = bin2hex(bin_result);
+
+	printf("The result for %f %c %f is:\n", num1, op_char, num2);
+	printf("Binary = %s\n", bin_result);
+	printf("Octal = %s\n", oct_result);
+	printf("Decimal = %f\n", result);
+	printf("Hex = %s\n", hex_result);
+
+	free(bin_result);
+	free(hex_result);
+	free(oct_result);
+}
+
+char *float2bin(float input) {
+	return calloc(1, sizeof(char));
 }
 
 char *int2bin(int input) {
