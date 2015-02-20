@@ -336,18 +336,6 @@ op_t parse_op_choice(const char *to_check) {
 	return OP_ERROR;
 }
 
-int bin_to_dec(const char *binary) {
-	int sum = 0;
-
-	for (int i = strlen(binary) - 1; i >= 0; i--) {
-		if (binary[i] == '1') {
-			sum += power(2, i);
-		}
-	}
-
-	return sum;
-}
-
 int power(int base, int power) {
 	int total = 1;
 
