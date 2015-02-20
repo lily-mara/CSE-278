@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include<assert.h>
 
 #include "main.h"
 
@@ -29,7 +30,27 @@ int main() {
 	printf("Goodbye!\n");
 }
 
-void run_int(char* str1, char* str2, op_t op) {
+float bin2float(const char *s) {
+	int v;
+	float f;
+	unsigned i;
+	char *p1 = (char*)&v, *p2 = (char*)&f;
+
+	// Collect binary digits into an integer variable
+	v = 0;
+	for (i = 0; i < 32; i++) {
+		v = (v << 1) + (s[i] - '0');
+	}
+
+	// Copy the bits from the integer variable to a float variable
+	for (i = 0; i < sizeof(f); i++) {
+		*p2++ = *p1++;
+	}
+
+	return f;
+}
+
+void run_int(const char* str1, const char* str2, op_t op) {
 	int num1 = bin2int(str1);
 	int num2 = bin2int(str2);
 
@@ -73,7 +94,7 @@ void run_int(char* str1, char* str2, op_t op) {
 	free(oct_result);
 }
 
-void run_float(char* str1, char* str2, op_t op) {
+void run_float(const char* str1, const char* str2, op_t op) {
 	float num1 = bin2float(str1);
 	float num2 = bin2float(str2);
 
@@ -138,7 +159,7 @@ char *int2bin(int input) {
 	return result;
 }
 
-char *bin2hex(char *input) {
+char *bin2hex(const char *input) {
 	char *output = calloc(9, sizeof(char));
 	output[8] = 0;
 	unsigned int hexnum;
@@ -158,7 +179,7 @@ char *bin2hex(char *input) {
 	return output;
 }
 
-int bin2int(char* input) {
+int bin2int(const char* input) {
 	size_t bits = strlen(input);
 	int result = 0;
 
@@ -180,25 +201,6 @@ int bin2int(char* input) {
 	}
 
 	return result;
-}
-
-float bin2float(char* input) {
-	assert(strlen(input) == 32);
-	bool negative = input[0] == '1';
-
-	char* exponent_str = calloc(9, sizeof(char));
-	char* significand_str = calloc(24, sizeof(char));
-
-	exponent_str[8] = '\0';
-	significand_str[23] = '\0';
-
-	strncpy(exponent_str, input + 1, 8);
-	strncpy(significand_str, input + 1, 8);
-
-	free(exponent_str);
-	free(significand_str);
-
-	return 0;
 }
 
 op_t get_op() {
@@ -239,7 +241,7 @@ type_t get_type() {
 	return return_type;
 }
 
-char* get_binary(char *number) {
+char* get_binary(const char *number) {
 	printf("Enter the %s number in binary format:\n", number);
 	char* num;
 
@@ -334,7 +336,7 @@ op_t parse_op_choice(const char *to_check) {
 	return OP_ERROR;
 }
 
-int bin_to_dec(char *binary) {
+int bin_to_dec(const char *binary) {
 	int sum = 0;
 
 	for (int i = strlen(binary) - 1; i >= 0; i--) {
@@ -361,8 +363,7 @@ int power(int base, int power) {
 // that pointer with the returned value, since the original pointer must be
 // deallocated using the same allocator with which it was allocated.  The return
 // value must NOT be deallocated using free() etc.
-char *trim_whitespace(char *str)
-{
+char *trim_whitespace(char *str) {
 	char *end;
 
 	// Trim leading space
@@ -390,7 +391,7 @@ inline bool is_whitespace(char x) {
 	return x == ' ' || x == '\n' || x == '\t';
 }
 
-char* bin2oct(char *input) {
+char* bin2oct(const char *input) {
 	size_t in_length = strlen(input);
 
 	int extra_zeroes = 3-in_length%3;
@@ -426,7 +427,7 @@ char* bin2oct(char *input) {
 	return out;
 }
 
-char oct2ascii(char *binary) {
+char oct2ascii(const char *binary) {
 	if (!strcmp("000", binary))
 		return '0';
 	if (!strcmp("001", binary))
