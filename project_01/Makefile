@@ -1,8 +1,8 @@
 CC=clang
-OPTS=-ggdb
+OPTS=-ggdb -std=c99
 COMP=$(CC) $(OPTS)
 
-FILES=proj1.c
+FILES=proj1.c main.h
 EXECUTABLE=proj1.out
 
 $(EXECUTABLE) : $(FILES)
