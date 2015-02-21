@@ -139,7 +139,21 @@ void run_float(const char* str1, const char* str2, op_t op) {
 }
 
 char *float2bin(float input) {
-	return calloc(1, sizeof(char));
+	char* bin = calloc(33, sizeof(char));
+	bin[32] = '\0';
+
+	int cheater = *((int*)((char*)&input));
+
+	for (int i = 0; i < 32; i++) {
+		int bit = (cheater >> (31-i)) & 1;
+		if (bit) {
+			bin[i] = '1';
+		} else {
+			bin[i] = '0';
+		}
+	}
+
+	return bin;
 }
 
 char *int2bin(int input) {
@@ -258,11 +272,10 @@ char* get_binary(const char *number) {
 }
 
 char* get_str() {
-	char *buffer = NULL;
+	char *buffer = calloc(100, sizeof(char));
 	char *output;
-	size_t len;
 
-	int read_status = getline(&buffer, &len, stdin);
+	scanf("%s", buffer);
 	char *input = trim_whitespace(buffer);
 
 	output = calloc(strlen(input) + 1, sizeof(char));
