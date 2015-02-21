@@ -86,7 +86,7 @@ void run_int(const char* str1, const char* str2, op_t op) {
 	printf("The result for %d %c %d is:\n", num1, op_char, num2);
 	printf("Binary = %s\n", bin_result);
 	printf("Octal = %s\n", oct_result);
-	printf("Decimal = %+d\n", result);
+	printf("Decimal = %+011d\n", result);
 	printf("Hex = %s\n", hex_result);
 
 	free(bin_result);
@@ -130,7 +130,7 @@ void run_float(const char* str1, const char* str2, op_t op) {
 	printf("The result for %f %c %f is:\n", num1, op_char, num2);
 	printf("Binary = %s\n", bin_result);
 	printf("Octal = %s\n", oct_result);
-	printf("Decimal = %+f\n", result);
+	printf("Decimal = %+011f\n", result);
 	printf("Hex = %s\n", hex_result);
 
 	free(bin_result);
