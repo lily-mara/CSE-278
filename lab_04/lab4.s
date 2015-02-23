@@ -13,7 +13,7 @@ main:
 	and	esp, -16 ;immediate
 	sub	esp, 32
 	mov	DWORD PTR [esp+24], 0 ;indirect
-	jmp	.L2
+	jmp	.L2 ;direct
 .L3:
 	mov	eax, DWORD PTR [esp+24] ;base + displacement
 	lea	edx, [eax+1]
