@@ -5,4 +5,32 @@ Nate Mara
 
 CSE 278
 
-#.
+#. binary to hex & decimal
+
+   A. 0xF0  || 240
+   B. 0x81.7 || 129.7
+   C. 0x4D.D || 77.13
+   D. 0x4D.D || 77.13
+
+#. Octal to decimal
+
+   A. 123.21
+   B. 153.474
+   C. 0.664
+   D. 209.81
+
+#. Hex to Decimal
+
+   A. 44908.2902
+   B. 47139.815
+   C. 4095.65535
+   D. 0.16773135
+
+#. 10111111111101
+
+#. 629
+
+#. Octal to hex
+
+   A. 0xD5E
+   B. 0x672F
