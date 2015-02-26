@@ -36,3 +36,18 @@ CSE 278
    B. 0x672F
 
 #. 45 (101101)
+
+#. sign-magnetude to 2's complement
+
+    A. 11100111
+    B. 01110000
+    C. 11000001
+
+#. Hex to 2's complement decimal
+
+    A. -477661
+    B. -7201887
+    C. -1
+    D. 4095
+
+#. 00110010
