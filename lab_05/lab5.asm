@@ -14,8 +14,7 @@ main:
 	call printf
 	add esp, 4
 
-	mov eax, num1
-	push eax
+	push num1
 	push fmtScanf
 	call scanf
 	add esp, 8
@@ -24,8 +23,7 @@ main:
 	call printf
 	add esp, 4
 
-	mov eax, num2
-	push eax
+	push num2
 	push fmtScanf
 	call scanf
 	add esp, 8
