@@ -13,7 +13,7 @@ main:
 	call printf
 	add esp, 4
 
-	mov eax, [input]
+	mov eax, input
 	push eax
 	push fmtScanf
 	call scanf
