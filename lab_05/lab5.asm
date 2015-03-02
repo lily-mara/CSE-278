@@ -33,4 +33,8 @@ main:
 	push fmtPrintf
 	call printf
 	add esp, 8
+
+	push dword ebx
+	add esp, 4
+
 	ret
