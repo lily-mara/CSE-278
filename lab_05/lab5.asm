@@ -2,8 +2,7 @@ global main
 extern printf, scanf
 
 section .data
-	num1: dd 0
-	num2: dd 0
+	input: dd 0
 	fmtMsg: db 'Enter input', 0xA, 0x0
 	fmtPrintf: db 'result = %d', 0xA, 0x0
 	fmtScanf: db '%d', 0x0
@@ -14,23 +13,23 @@ main:
 	call printf
 	add esp, 4
 
-	push num1
+	push input
 	push fmtScanf
 	call scanf
 	add esp, 8
+	mov ebx, [input]
 
 	push fmtMsg
 	call printf
 	add esp, 4
 
-	push num2
+	push input
 	push fmtScanf
 	call scanf
 	add esp, 8
 
-	mov eax, [num1]
-	add eax, [num2]
-	push dword eax
+	add ebx, [input]
+	push dword ebx
 	push fmtPrintf
 	call printf
 	add esp, 8
