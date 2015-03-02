@@ -8,6 +8,7 @@ section .data
 	fmtScanf: db '%d', 0x0
 
 section .text
+main:
 	push fmtMsg
 	call printf
 	add esp, 4
