@@ -1,0 +1,43 @@
+Homework 4
+==========
+
+Nate Mara
+
+CSE 278
+
+#. Components of Von Newman archetecture:
+
+    1. ALU
+    2. Control Unit
+    3. Memory
+    4. I/O
+
+#. The EIP register is the instruction pointer register. It points to the
+   location of the next instruction to be run by the processor.
+
+#. The CS register points to the location of the code segment in memory. The DS
+   register points to the data segment in memory. The SS register points to the
+   location of the stack segment in memory. The ES register can be used to point
+   to "extra" segments of memory, like video memory.
+
+#. Addressing modes:
+
+    #. Base addressing
+    #. Displacement addressing
+    #. Displacement addressing
+    #. Displacement addressing
+
+#. This instruction would be located at :code:`2100H`.
+#. This instruction would be located at :code:`11482H`.
+#. Two move instructions:
+
+    #. This moves the value :code:`1234ABCD` into register EAX
+    #. This moves the value :code:`1234` into the location pointed to by
+       register AX.
+
+#.
+#. Addresses
+
+    #. 345E1
+    #. FFFFF
+    #. 449BF
