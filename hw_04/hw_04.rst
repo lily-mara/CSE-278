@@ -34,10 +34,3 @@ CSE 278
     #. This moves the value :code:`1234ABCD` into register EAX
     #. This moves the value :code:`1234` into the location pointed to by
        register AX.
-
-#.
-#. Addresses
-
-    #. 345E1
-    #. FFFFF
-    #. 449BF
