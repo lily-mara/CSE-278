@@ -12,3 +12,13 @@ package { "nasm":
   ensure  => present,
   require => Exec["update"],
 }
+
+package { "make":
+  ensure  => present,
+  require => Exec["update"],
+}
+
+package { "gcc":
+  ensure  => present,
+  require => Exec["update"],
+}
