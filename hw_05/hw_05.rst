@@ -5,22 +5,22 @@ Nate Mara
 =========
 
 1. This operation results in an overflow.
-2. Set: OF, SF, CF. Not set: ZF, AF, PF.
+2. Set: PF, AF. Not set: ZF, CF, OF.
 3. Conditional jumps:
 
     a) This will jump.
     b) This will not jump.
 
 4. This will not jump, as 067CH is equal to 1660.
-5. The loop will run 65,536 times.
-6. Register EAX will contain 00000026H at the end of the loop execution.
+5. The loop will run 65,535 times.
+6. Register EAX will contain 30 at the end of the loop execution.
 7. The address of the operand is 28400H. The top of the stack will contain the
    value A020H.
 8. The address of the top of the stack is 2FFEAH, the address of the operand is
    FF002H. After the execution of this operation, the value at the top of the
    stack will be removed and moved to the address FF002H.
 9. DWORD tells the assembler that the value stored at [input] is a double-word
-   sized value.
+   sized value (32 bits).
 10. You can get at the parameters like this::
 
     ADD SP, 6
