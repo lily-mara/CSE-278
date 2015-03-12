@@ -32,3 +32,4 @@
 *.swo
 
 hw*/*.pdf
+.vagrant
