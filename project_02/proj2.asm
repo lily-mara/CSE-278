@@ -6,13 +6,16 @@ section .data
 	prompt2: db 'Enter the second number in binary format:',0xA,0	;message printed to users
 	opcode_prompt: db 'Enter the calculation to perform (add, sub, mul, div)',0xA,0
 	fmtScanf: db "%s",0				;scanf format string
-	result_format: db "The result for %d %c %d is: %d",0xA,0		;printf format string
+	result_format: db "The result for %d %c %d:",0xA,"binary = %s",0xA,0		;printf format string
 
 	;character codes for operations
 	ADD_C: equ 43
 	SUB_C: equ 45
 	MUL_C: equ 42
 	DIV_C: equ 47
+
+	ONE: equ 49
+	ZERO: equ 48
 
 	ADD_S: db "add",0
 	SUB_S: db "sub",0
@@ -93,6 +96,10 @@ main:
 	call do_operation
 
 	push eax
+	call int2bin
+	add esp, 4
+
+	push result
 	call print_result
 	add esp, 4
 
@@ -256,3 +263,43 @@ print_result:
 	pop ebp
 
 	ret
+
+int2bin:
+	push ebp
+	mov ebp, esp
+
+	mov eax, [ebp+8]
+
+	mov ecx, 0
+	jmp int2bin_loop
+
+int2bin_exit:
+	mov esp, ebp
+	pop ebp
+
+	ret
+
+int2bin_loop:
+	mov ebx, 31
+	sub ebx, ecx
+	bt eax, ebx
+
+	jc int2bin_one
+	jmp int2bin_zero
+
+int2bin_one:
+	mov ebx, ONE
+	jmp int2bin_reloop
+
+int2bin_zero:
+	mov ebx, ZERO
+	jmp int2bin_reloop
+
+int2bin_reloop:
+	mov [result+ecx], ebx
+
+	add ecx, 1
+	cmp ecx, 32
+	je int2bin_exit
+
+	jmp int2bin_loop
