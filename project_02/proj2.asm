@@ -7,7 +7,6 @@ section .data
 	opcode_prompt: db 'Enter the calculation to perform (add, sub, mul, div)',0xA,0
 	fmtScanf: db "%s",0				;scanf format string
 	result_format: db "The result for %d %c %d is: %d",0xA,0		;printf format string
-	one: db '1'
 
 	;character codes for operations
 	ADD_C: equ 43
@@ -32,6 +31,9 @@ section .bss
 	;the operation that the user indicates
 	op_string: resb 3
 	op_c: resb 1
+
+	;final result in binary
+	result: resb 33
 
 section .text
 main:
@@ -87,6 +89,12 @@ main:
 	add esp, 8
 
 	call get_opcode
+
+	call do_operation
+
+	push eax
+	call print_result
+	add esp, 4
 
 	ret
 
@@ -183,3 +191,68 @@ get_opcode:
 	mov eax, DIV_C
 	mov [op_c], eax
 	jmp .exit
+
+do_operation:
+	push ebp
+	mov ebp, esp
+
+	mov ebx, [op_c]
+	mov eax, [number1]
+
+	cmp ebx, ADD_C
+	je .add
+
+	cmp ebx, SUB_C
+	je .sub
+
+	cmp ebx, MUL_C
+	je .mul
+
+	cmp ebx, DIV_C
+	je .div
+
+	jmp .exit
+
+.exit:
+	mov esp, ebp
+	pop ebp
+
+	ret
+
+.add:
+	add eax, [number2]
+	jmp .exit
+
+.sub:
+	sub eax, [number2]
+	jmp .exit
+
+.mul:
+	mov ebx, [number2]
+	mul ebx
+	jmp .exit
+
+.div:
+	mov edx, 0
+	mov ebx, [number2]
+	div ebx
+	jmp .exit
+
+print_result:
+	push ebp
+	mov ebp, esp
+
+	mov eax, [ebp+8]
+
+	push eax
+	push dword [number2]
+	push dword [op_c]
+	push dword [number1]
+	push result_format
+
+	call printf
+
+	mov esp, ebp
+	pop ebp
+
+	ret
