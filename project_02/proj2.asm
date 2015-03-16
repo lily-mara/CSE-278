@@ -9,8 +9,11 @@ section .data
 	one: db '1'
 
 section .bss
-	number1: resb 32
-	number2: resb 32
+	input1: resb 32
+	input2: resb 32
+
+	number1: resb 4
+	number2: resb 4
 
 section .text
 main:
@@ -19,9 +22,9 @@ main:
 	call printf
 	add esp, 4
 
-	;get the user's first number
+	;get the user's first input
 	sub esp, 4
-	mov dword [esp], number1
+	mov dword [esp], input1
 	sub esp, 4
 	mov dword [esp], fmtScanf
 	call scanf
@@ -32,33 +35,25 @@ main:
 	call printf
 	add esp, 4
 
-	;get the user's second number
+	;get the user's second input
 	sub esp, 4
-	mov dword [esp], number2
+	mov dword [esp], input2
 	sub esp, 4
 	mov dword [esp], fmtScanf
 	call scanf
 	add esp, 8
 
-	push number1
+	;convert the first binary value to a number
+	push input1
 	call bin2int
 	add esp, 4
+	mov [number1], eax
 
-	push eax
-
-	push fmtPrintf
-	call printf
-	add esp, 8
-
-	push number2
+	;convert the second binary value to a number
+	push input2
 	call bin2int
 	add esp, 4
-
-	push eax
-
-	push fmtPrintf
-	call printf
-	add esp, 8
+	mov [number2], eax
 
 	ret
 
