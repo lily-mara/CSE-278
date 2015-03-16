@@ -271,35 +271,35 @@ int2bin:
 	mov eax, [ebp+8]
 
 	mov ecx, 0
-	jmp int2bin_loop
+	jmp .loop
 
-int2bin_exit:
+.exit:
 	mov esp, ebp
 	pop ebp
 
 	ret
 
-int2bin_loop:
+.loop:
 	mov ebx, 31
 	sub ebx, ecx
 	bt eax, ebx
 
-	jc int2bin_one
-	jmp int2bin_zero
+	jc .one
+	jmp .zero
 
-int2bin_one:
+.one:
 	mov ebx, ONE
-	jmp int2bin_reloop
+	jmp .reloop
 
-int2bin_zero:
+.zero:
 	mov ebx, ZERO
-	jmp int2bin_reloop
+	jmp .reloop
 
-int2bin_reloop:
+.reloop:
 	mov [result+ecx], ebx
 
 	add ecx, 1
 	cmp ecx, 32
-	je int2bin_exit
+	je .exit
 
-	jmp int2bin_loop
+	jmp .loop
