@@ -4,16 +4,34 @@ extern printf, scanf				;define external functions that are called
 section .data
 	prompt1: db 'Enter the first number in binary format:',0xA,0	;message printed to users
 	prompt2: db 'Enter the second number in binary format:',0xA,0	;message printed to users
+	opcode_prompt: db 'Enter the calculation to perform (add, sub, mul, div)',0xA,0
 	fmtScanf: db "%s",0				;scanf format string
-	fmtPrintf: db "%d",0xA,0		;printf format string
+	result_format: db "The result for %d %c %d is: %d",0xA,0		;printf format string
 	one: db '1'
 
+	;character codes for operations
+	ADD_C: equ 43
+	SUB_C: equ 45
+	MUL_C: equ 42
+	DIV_C: equ 47
+
+	ADD_S: db "add",0
+	SUB_S: db "sub",0
+	MUL_S: db "mul",0
+	DIV_S: db "div",0
+
 section .bss
+	;the binary strings inputted by the users
 	input1: resb 32
 	input2: resb 32
 
+	;the binary strings converted to numbers
 	number1: resb 4
 	number2: resb 4
+
+	;the operation that the user indicates
+	op_string: resb 3
+	op_c: resb 1
 
 section .text
 main:
@@ -54,6 +72,21 @@ main:
 	call bin2int
 	add esp, 4
 	mov [number2], eax
+
+	;prompt user for operation code
+	push opcode_prompt
+	call printf
+	add esp, 4
+
+	;get the opcode from the user
+	sub esp, 4
+	mov dword [esp], op_string
+	sub esp, 4
+	mov dword [esp], fmtScanf
+	call scanf
+	add esp, 8
+
+	call get_opcode
 
 	ret
 
@@ -100,3 +133,53 @@ bin2int:
 	cmp ecx, 32
 	je .exit
 	jmp .loop
+
+get_opcode:
+	push ebp
+	mov ebp, esp
+
+	mov eax, 0
+
+	mov eax, [ADD_S]
+	cmp eax, [op_string]
+	je .add
+
+	mov eax, [SUB_S]
+	cmp eax, [op_string]
+	je .sub
+
+	mov eax, [MUL_S]
+	cmp eax, [op_string]
+	je .mul
+
+	mov eax, [DIV_S]
+	cmp eax, [op_string]
+	je .div
+
+	jmp .exit
+
+.exit:
+	mov esp, ebp
+	pop ebp
+
+	ret
+
+.add:
+	mov eax, ADD_C
+	mov [op_c], eax
+	jmp .exit
+
+.sub:
+	mov eax, SUB_C
+	mov [op_c], eax
+	jmp .exit
+
+.mul:
+	mov eax, MUL_C
+	mov [op_c], eax
+	jmp .exit
+
+.div:
+	mov eax, DIV_C
+	mov [op_c], eax
+	jmp .exit
