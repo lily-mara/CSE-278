@@ -1,13 +1,23 @@
 from unittest import TestCase, main
 import subprocess
 import re
+import sys
+from os import path
 
 NUM_PATTERN = re.compile(r'\w+\s*=\s*(?P<num>[10]+)')
+
+if len(sys.argv) < 2:
+	print('You must provide an executable on as the first argument')
+	sys.exit(1)
+
+if not path.exists(sys.argv[1]):
+	print('The executable provided as an argument must be a file that exists.')
+	sys.exit(1)
 
 
 def run(num1, num2, operation):
 	p = subprocess.Popen(
-		'./proj2.out',
+		sys.argv[1],
 		stdout=subprocess.PIPE,
 		stderr=subprocess.STDOUT,
 		stdin=subprocess.PIPE,
@@ -96,4 +106,4 @@ class TestStuff(TestCase):
 
 
 if __name__ == '__main__':
-	main()
+	main(argv=sys.argv[1:])
