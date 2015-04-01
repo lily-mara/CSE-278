@@ -16,6 +16,20 @@ OPERATION_PATTERN = re.compile(
 	re.VERBOSE
 )
 
+NUMS = {
+	-6.25: '11000000110010000000000000000000',
+	-5: '11000000101000000000000000000000',
+	-3.5: '11000000011000000000000000000000',
+	-2.5: '11000000001000000000000000000000',
+	-1: '10111111100000000000000000000000',
+	0: '00000000000000000000000000000000',
+	1: '00111111100000000000000000000000',
+	2.5: '01000000001000000000000000000000',
+	3.5: '01000000011000000000000000000000',
+	5: '01000000101000000000000000000000',
+	6.25: '01000000110010000000000000000000',
+}
+
 if len(sys.argv) < 2:
 	print('You must provide an executable on as the first argument')
 	sys.exit(1)
@@ -53,8 +67,8 @@ def run(num1, num2, operation):
 
 class TestConversion(TestCase):
 	def test_positive_whole(self):
-		num1 = '01000000001000000000000000000000'
-		num2 = '01000000001000000000000000000000'
+		num1 = NUMS[2.5]
+		num2 = NUMS[2.5]
 		operation = 'add'
 
 		num1_expect = '2.5'
@@ -70,7 +84,7 @@ class TestConversion(TestCase):
 
 class TestOperation(TestCase):
 	def get_op(self, operation):
-		num = '01000000001000000000000000000000'
+		num = NUMS[2.5]
 		return run(num, num, operation)['operation']
 
 	def test_add(self):
@@ -87,74 +101,74 @@ class TestOperation(TestCase):
 
 
 class TestResults(TestCase):
-	def test_two_positive_addd(self):
-		num1 = '00000000000000000000000001011111'
-		num2 = '00000000000000000000000000110110'
+	def test_two_positive_add(self):
+		num1 = NUMS[2.5]
+		num2 = NUMS[2.5]
 		operation = 'add'
-		expect = '00000000000000000000000010010101'
+		expect = NUMS[5]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_sub_negative_result(self):
-		num1 = '00000000000000000000000000110110'
-		num2 = '00000000000000000000000001011111'
+		num1 = NUMS[2.5]
+		num2 = NUMS[3.5]
 		operation = 'sub'
-		expect = '11111111111111111111111111010111'
+		expect = NUMS[-1]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_mul(self):
-		num1 = '00000000000000000000000000110110'
-		num2 = '00000000000000000000000001011111'
+		num1 = NUMS[2.5]
+		num2 = NUMS[2.5]
 		operation = 'mul'
-		expect = '00000000000000000001010000001010'
+		expect = NUMS[6.25]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_div(self):
-		num1 = '00000000000000000000000100101100'
-		num2 = '00000000000000000000000000000101'
+		num1 = NUMS[2.5]
+		num2 = NUMS[2.5]
 		operation = 'div'
-		expect = '00000000000000000000000000111100'
+		expect = NUMS[1]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_add(self):
-		num1 = '11111111111111111111111111111110'
-		num2 = '11111111111111111111111111111100'
+		num1 = NUMS[-2.5]
+		num2 = NUMS[-3.5]
 		operation = 'add'
-		expect = '11111111111111111111111111111010'
+		expect = NUMS[1]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_sub(self):
-		num1 = '11111111111111111111111111111110'
-		num2 = '11111111111111111111111111111100'
+		num1 = NUMS[-2.5]
+		num2 = NUMS[-2.5]
 		operation = 'sub'
-		expect = '00000000000000000000000000000010'
+		expect = NUMS[5]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_mul(self):
-		num1 = '11111111111111111111111111111110'
-		num2 = '11111111111111111111111111111100'
+		num1 = NUMS[-2.5]
+		num2 = NUMS[-2.5]
 		operation = 'mul'
-		expect = '00000000000000000000000000001000'
+		expect = NUMS[6.25]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_div(self):
-		num1 = '11111111111111111111111111111110'
-		num2 = '11111111111111111111111111111100'
+		num1 = NUMS[-2.5]
+		num2 = NUMS[-2.5]
 		operation = 'div'
-		expect = '00000000000000000000000000000001'
+		expect = NUMS[1]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
