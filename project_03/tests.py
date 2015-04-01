@@ -68,6 +68,24 @@ class TestConversion(TestCase):
 		self.assertEqual(num2_expect, num2_actual)
 
 
+class TestOperation(TestCase):
+	def get_op(self, operation):
+		num = '01000000001000000000000000000000'
+		return run(num, num, operation)['operation']
+
+	def test_add(self):
+		self.assertEqual(self.get_op('add'), '+')
+
+	def test_sub(self):
+		self.assertEqual(self.get_op('sub'), '-')
+
+	def test_mul(self):
+		self.assertEqual(self.get_op('mul'), '*')
+
+	def test_mul(self):
+		self.assertEqual(self.get_op('div'), '/')
+
+
 class TestResults(TestCase):
 	def test_two_positive_addd(self):
 		num1 = '00000000000000000000000001011111'
