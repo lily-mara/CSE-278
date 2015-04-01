@@ -82,7 +82,7 @@ class TestOperation(TestCase):
 	def test_mul(self):
 		self.assertEqual(self.get_op('mul'), '*')
 
-	def test_mul(self):
+	def test_div(self):
 		self.assertEqual(self.get_op('div'), '/')
 
 
