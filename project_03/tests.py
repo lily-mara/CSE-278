@@ -62,7 +62,7 @@ def run(num1, num2, operation):
 			'num2': result_search.group('num2'),
 		}
 	except AttributeError:
-		raise ValueError('Your output does not match requirements.\n' + out)
+		raise ValueError('Your output does not match requirements.')
 
 
 class TestConversion(TestCase):
