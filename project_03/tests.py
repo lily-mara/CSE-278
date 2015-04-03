@@ -66,20 +66,40 @@ def run(num1, num2, operation):
 
 
 class TestConversion(TestCase):
-	def test_positive_whole(self):
-		num1 = NUMS[2.5]
-		num2 = NUMS[2.5]
+	def get_nums(self, num1, num2):
+		num1 = NUMS[num1]
+		num2 = NUMS[num2]
 		operation = 'add'
-
-		num1_expect = '2.5'
-		num2_expect = '2.5'
 
 		test_run = run(num1, num2, operation)
 		num1_actual = test_run['num1']
 		num2_actual = test_run['num2']
 
-		self.assertEqual(num1_expect, num1_actual)
-		self.assertEqual(num2_expect, num2_actual)
+		return num1_actual, num2_actual
+
+	def test_convert_positive_whole(self):
+		num1, num2 = self.get_nums(5, 5)
+
+		self.assertEqual(num1, '5.0')
+		self.assertEqual(num2, '5.0')
+
+	def test_convert_negative_whole(self):
+		num1, num2 = self.get_nums(-5, -5)
+
+		self.assertEqual(num1, '-5.0')
+		self.assertEqual(num2, '-5.0')
+
+	def test_convert_positive_with_decimal(self):
+		num1, num2 = self.get_nums(2.5, 2.5)
+
+		self.assertEqual(num1, '2.5')
+		self.assertEqual(num2, '2.5')
+
+	def test_convert_negative_with_decimal(self):
+		num1, num2 = self.get_nums(-2.5, -2.5)
+
+		self.assertEqual(num1, '-2.5')
+		self.assertEqual(num2, '-2.5')
 
 
 class TestOperation(TestCase):
