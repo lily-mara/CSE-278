@@ -6,7 +6,8 @@ section .data
 	prompt2: db 'Enter the second number in binary format:',0xA,0	;message printed to users
 	opcode_prompt: db 'Enter the calculation to perform (add, sub, mul, div)',0xA,0
 	fmtScanf: db "%s",0				;scanf format string
-	result_format: db "The result for %d %c %d:",0xA,"binary = %s",0xA,0		;printf format string
+	;result_format: db "The result for %f %c %f:",0xA,"binary = %s",0xA,0		;printf format string
+	result_format: db "%f",0xA,0		;printf format string
 
 	;character codes for operations
 	ADD_C: equ 43
@@ -37,6 +38,7 @@ section .bss
 
 	;final result in binary
 	result: resb 33
+	result_num: resb 4
 
 section .text
 main:
@@ -71,14 +73,12 @@ main:
 	call bin2int
 	add esp, 4
 	mov [number1], eax
-	fld dword [number1]
 
 	;convert the second binary value to a number
 	push input2
 	call bin2int
 	add esp, 4
 	mov [number2], eax
-	fld dword [number2]
 
 	;prompt user for operation code
 	push opcode_prompt
@@ -97,7 +97,7 @@ main:
 
 	call do_operation
 
-	push eax
+	push dword [result_num]
 	call int2bin
 	add esp, 4
 
@@ -206,7 +206,7 @@ do_operation:
 	mov ebp, esp
 
 	mov ebx, [op_c]
-	mov eax, [number1]
+	fld dword [number1]
 
 	cmp ebx, ADD_C
 	je .add
@@ -223,28 +223,27 @@ do_operation:
 	jmp .exit
 
 .exit:
+	fstp dword [result_num]
+
 	mov esp, ebp
 	pop ebp
 
 	ret
 
 .add:
-	add eax, [number2]
+	fadd dword [number2]
 	jmp .exit
 
 .sub:
-	sub eax, [number2]
+	fsub dword [number2]
 	jmp .exit
 
 .mul:
-	mov ebx, [number2]
-	mul ebx
+	fmul dword [number2]
 	jmp .exit
 
 .div:
-	mov edx, 0
-	mov ebx, [number2]
-	div ebx
+	fdiv dword [number2]
 	jmp .exit
 
 print_result:
@@ -253,10 +252,11 @@ print_result:
 
 	mov eax, [ebp+8]
 
-	push eax
-	push dword [number2]
-	push dword [op_c]
-	push dword [number1]
+	;push eax
+	;push dword [number2]
+	;push dword [op_c]
+	;push dword [number1]
+	push dword [result_num]
 	push result_format
 
 	call printf
