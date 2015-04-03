@@ -139,9 +139,9 @@ class TestResults(TestCase):
 
 	def test_two_negative_add(self):
 		num1 = NUMS[-2.5]
-		num2 = NUMS[-3.5]
+		num2 = NUMS[-2.5]
 		operation = 'add'
-		expect = NUMS[1]
+		expect = NUMS[-5]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
@@ -150,7 +150,7 @@ class TestResults(TestCase):
 		num1 = NUMS[-2.5]
 		num2 = NUMS[-2.5]
 		operation = 'sub'
-		expect = NUMS[5]
+		expect = NUMS[0]
 
 		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
