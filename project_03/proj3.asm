@@ -71,12 +71,14 @@ main:
 	call bin2int
 	add esp, 4
 	mov [number1], eax
+	fld dword [number1]
 
 	;convert the second binary value to a number
 	push input2
 	call bin2int
 	add esp, 4
 	mov [number2], eax
+	fld dword [number2]
 
 	;prompt user for operation code
 	push opcode_prompt
