@@ -16,7 +16,11 @@ OPERATION_PATTERN = re.compile(
 	re.VERBOSE
 )
 
+FLT_MAX = 340282346638528859811704183484516925440.0
+FLT_MIN = -340282346638528859811704183484516925440.0
+
 NUMS = {
+	FLT_MIN: '11111111011111111111111111111111',
 	-6.25: '11000000110010000000000000000000',
 	-5: '11000000101000000000000000000000',
 	-3.5: '11000000011000000000000000000000',
@@ -28,6 +32,7 @@ NUMS = {
 	3.5: '01000000011000000000000000000000',
 	5: '01000000101000000000000000000000',
 	6.25: '01000000110010000000000000000000',
+	FLT_MAX: '01111111011111111111111111111111',
 }
 
 if len(sys.argv) < 2:
@@ -101,6 +106,20 @@ class TestConversion(TestCase):
 		self.assertEqual(num1, -2.5)
 		self.assertEqual(num2, -2.5)
 
+	def test_convert_min(self):
+		num = FLT_MIN
+		num1, num2 = self.get_nums(num, num)
+
+		self.assertEqual(num1, num)
+		self.assertEqual(num2, num)
+
+	def test_convert_max(self):
+		num = FLT_MAX
+		num1, num2 = self.get_nums(num, num)
+
+		self.assertEqual(num1, num)
+		self.assertEqual(num2, num)
+
 
 class TestOperation(TestCase):
 	def get_op(self, operation):
@@ -121,76 +140,59 @@ class TestOperation(TestCase):
 
 
 class TestResults(TestCase):
+	def get_bin_result(self, num1, num2, op):
+		num1 = NUMS[num1]
+		num2 = NUMS[num2]
+
+		result = run(num1, num2, op)
+		return result['bin_result']
+
 	def test_two_positive_add(self):
-		num1 = NUMS[2.5]
-		num2 = NUMS[2.5]
-		operation = 'add'
+		actual = self.get_bin_result(2.5, 2.5, 'add')
 		expect = NUMS[5]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_sub_negative_result(self):
-		num1 = NUMS[2.5]
-		num2 = NUMS[3.5]
-		operation = 'sub'
+		actual = self.get_bin_result(2.5, 3.5, 'sub')
 		expect = NUMS[-1]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_mul(self):
-		num1 = NUMS[2.5]
-		num2 = NUMS[2.5]
-		operation = 'mul'
+		actual = self.get_bin_result(2.5, 2.5, 'mul')
 		expect = NUMS[6.25]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_div(self):
-		num1 = NUMS[2.5]
-		num2 = NUMS[2.5]
-		operation = 'div'
+		actual = self.get_bin_result(2.5, 2.5, 'div')
 		expect = NUMS[1]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_add(self):
-		num1 = NUMS[-2.5]
-		num2 = NUMS[-2.5]
-		operation = 'add'
+		actual = self.get_bin_result(-2.5, -2.5, 'add')
 		expect = NUMS[-5]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_sub(self):
-		num1 = NUMS[-2.5]
-		num2 = NUMS[-2.5]
-		operation = 'sub'
+		actual = self.get_bin_result(-2.5, -2.5, 'sub')
 		expect = NUMS[0]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_mul(self):
-		num1 = NUMS[-2.5]
-		num2 = NUMS[-2.5]
-		operation = 'mul'
+		actual = self.get_bin_result(-2.5, -2.5, 'mul')
 		expect = NUMS[6.25]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_div(self):
-		num1 = NUMS[-2.5]
-		num2 = NUMS[-2.5]
-		operation = 'div'
+		actual = self.get_bin_result(-2.5, -2.5, 'div')
 		expect = NUMS[1]
 
-		actual = run(num1, num2, operation)['bin_result']
 		self.assertEqual(actual, expect)
 
 
