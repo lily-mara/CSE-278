@@ -4,6 +4,7 @@ import subprocess
 import re
 import sys
 from os import path
+import struct
 
 BIN_PATTERN = re.compile(r'\w+\s*=\s*(?P<bin>[10]+)')
 OPERATION_PATTERN = re.compile(
@@ -19,21 +20,15 @@ OPERATION_PATTERN = re.compile(
 FLT_MAX = 340282346638528859811704183484516925440.0
 FLT_MIN = -340282346638528859811704183484516925440.0
 
-NUMS = {
-	FLT_MIN: '11111111011111111111111111111111',
-	-6.25: '11000000110010000000000000000000',
-	-5: '11000000101000000000000000000000',
-	-3.5: '11000000011000000000000000000000',
-	-2.5: '11000000001000000000000000000000',
-	-1: '10111111100000000000000000000000',
-	0: '00000000000000000000000000000000',
-	1: '00111111100000000000000000000000',
-	2.5: '01000000001000000000000000000000',
-	3.5: '01000000011000000000000000000000',
-	5: '01000000101000000000000000000000',
-	6.25: '01000000110010000000000000000000',
-	FLT_MAX: '01111111011111111111111111111111',
-}
+
+def to_bin(num):
+	bin_num = str(bin(struct.unpack('L', struct.pack('f', num))[0]))[2:]
+	for _ in range(0, 32 - len(bin_num)):
+		bin_num = '0' + bin_num
+
+	assert len(bin_num) == 32
+	return bin_num
+
 
 if len(sys.argv) < 2:
 	print('You must provide an executable on as the first argument')
@@ -72,8 +67,8 @@ def run(num1, num2, operation):
 
 class TestConversion(TestCase):
 	def get_nums(self, num1, num2):
-		num1 = NUMS[num1]
-		num2 = NUMS[num2]
+		num1 = to_bin(num1)
+		num2 = to_bin(num2)
 		operation = 'add'
 
 		test_run = run(num1, num2, operation)
@@ -123,7 +118,7 @@ class TestConversion(TestCase):
 
 class TestOperation(TestCase):
 	def get_op(self, operation):
-		num = NUMS[2.5]
+		num = to_bin(2.5)
 		return run(num, num, operation)['operation']
 
 	def test_add(self):
@@ -141,57 +136,57 @@ class TestOperation(TestCase):
 
 class TestResults(TestCase):
 	def get_bin_result(self, num1, num2, op):
-		num1 = NUMS[num1]
-		num2 = NUMS[num2]
+		num1 = to_bin(num1)
+		num2 = to_bin(num2)
 
 		result = run(num1, num2, op)
 		return result['bin_result']
 
 	def test_two_positive_add(self):
 		actual = self.get_bin_result(2.5, 2.5, 'add')
-		expect = NUMS[5]
+		expect = to_bin(5)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_sub_negative_result(self):
 		actual = self.get_bin_result(2.5, 3.5, 'sub')
-		expect = NUMS[-1]
+		expect = to_bin(-1)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_mul(self):
 		actual = self.get_bin_result(2.5, 2.5, 'mul')
-		expect = NUMS[6.25]
+		expect = to_bin(6.25)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_positive_div(self):
 		actual = self.get_bin_result(2.5, 2.5, 'div')
-		expect = NUMS[1]
+		expect = to_bin(1)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_add(self):
 		actual = self.get_bin_result(-2.5, -2.5, 'add')
-		expect = NUMS[-5]
+		expect = to_bin(-5)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_sub(self):
 		actual = self.get_bin_result(-2.5, -2.5, 'sub')
-		expect = NUMS[0]
+		expect = to_bin(0)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_mul(self):
 		actual = self.get_bin_result(-2.5, -2.5, 'mul')
-		expect = NUMS[6.25]
+		expect = to_bin(6.25)
 
 		self.assertEqual(actual, expect)
 
 	def test_two_negative_div(self):
 		actual = self.get_bin_result(-2.5, -2.5, 'div')
-		expect = NUMS[1]
+		expect = to_bin(1)
 
 		self.assertEqual(actual, expect)
 
