@@ -58,8 +58,8 @@ def run(num1, num2, operation):
 		return {
 			'bin_result': bin_search.group('bin'),
 			'operation': result_search.group('op'),
-			'num1': result_search.group('num1'),
-			'num2': result_search.group('num2'),
+			'num1': float(result_search.group('num1')),
+			'num2': float(result_search.group('num2')),
 		}
 	except AttributeError:
 		raise ValueError('Your output does not match requirements.')
@@ -80,26 +80,26 @@ class TestConversion(TestCase):
 	def test_convert_positive_whole(self):
 		num1, num2 = self.get_nums(5, 5)
 
-		self.assertEqual(num1, '5.0')
-		self.assertEqual(num2, '5.0')
+		self.assertEqual(num1, 5.0)
+		self.assertEqual(num2, 5.0)
 
 	def test_convert_negative_whole(self):
 		num1, num2 = self.get_nums(-5, -5)
 
-		self.assertEqual(num1, '-5.0')
-		self.assertEqual(num2, '-5.0')
+		self.assertEqual(num1, -5.0)
+		self.assertEqual(num2, -5.0)
 
 	def test_convert_positive_with_decimal(self):
 		num1, num2 = self.get_nums(2.5, 2.5)
 
-		self.assertEqual(num1, '2.5')
-		self.assertEqual(num2, '2.5')
+		self.assertEqual(num1, 2.5)
+		self.assertEqual(num2, 2.5)
 
 	def test_convert_negative_with_decimal(self):
 		num1, num2 = self.get_nums(-2.5, -2.5)
 
-		self.assertEqual(num1, '-2.5')
-		self.assertEqual(num2, '-2.5')
+		self.assertEqual(num1, -2.5)
+		self.assertEqual(num2, -2.5)
 
 
 class TestOperation(TestCase):
