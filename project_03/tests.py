@@ -193,6 +193,48 @@ class TestResults(TestCase):
 
 		self.assertEqual(actual, expect)
 
+	def test_two_large_positive_add(self):
+		actual = self.get_bin_result(10000, 10000, 'add')
+		expect = to_bin(20000)
+
+		self.assertEqual(actual, expect)
+
+	def test_two_large_positive_sub(self):
+		actual = self.get_bin_result(10000, 20, 'sub')
+		expect = to_bin(9980)
+
+		self.assertEqual(actual, expect)
+
+	def test_two_large_positive_mul(self):
+		actual = self.get_bin_result(10000, 20, 'mul')
+		expect = to_bin(200000)
+
+		self.assertEqual(actual, expect)
+
+	def test_two_large_positive_div(self):
+		actual = self.get_bin_result(10000, 20, 'div')
+		expect = to_bin(500)
+
+		self.assertEqual(actual, expect)
+
+	def test_max_sub(self):
+		actual = self.get_bin_result(FLT_MAX, FLT_MAX, 'sub')
+		expect = to_bin(0)
+
+		self.assertEqual(actual, expect)
+
+	def test_max_min_add(self):
+		actual = self.get_bin_result(FLT_MAX, FLT_MIN, 'add')
+		expect = to_bin(0)
+
+		self.assertEqual(actual, expect)
+
+	def test_max_min_div(self):
+		actual = self.get_bin_result(FLT_MAX, FLT_MIN, 'div')
+		expect = to_bin(-1)
+
+		self.assertEqual(actual, expect)
+
 
 if __name__ == '__main__':
 	main(argv=sys.argv[1:])
