@@ -1,4 +1,6 @@
 # coding: utf-8
+from __future__ import print_function
+
 from unittest import TestCase, main
 import subprocess
 import re
@@ -10,7 +12,7 @@ from collections import namedtuple
 BIN_PATTERN = re.compile(r'\w+\s*=\s*(?P<bin>[10]+)')
 OPERATION_PATTERN = re.compile(
 	r"""
-	result.*
+	result[^-0-9]+
 	(?P<num1>-?[0-9]+\.[0-9]+)\s+
 	(?P<op>[-/*+])\s+
 	(?P<num2>-?[0-9]+\.[0-9]+)
