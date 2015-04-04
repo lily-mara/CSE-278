@@ -5,6 +5,7 @@ import re
 import sys
 from os import path
 import struct
+from collections import namedtuple
 
 BIN_PATTERN = re.compile(r'\w+\s*=\s*(?P<bin>[10]+)')
 OPERATION_PATTERN = re.compile(
@@ -19,6 +20,8 @@ OPERATION_PATTERN = re.compile(
 
 FLT_MAX = 340282346638528859811704183484516925440.0
 FLT_MIN = -340282346638528859811704183484516925440.0
+
+Result = namedtuple('Result', 'bin op nums')
 
 
 def to_bin(num):
@@ -55,12 +58,14 @@ def run(num1, num2, operation):
 	result_search = OPERATION_PATTERN.search(out)
 
 	try:
-		return {
-			'bin_result': bin_search.group('bin'),
-			'operation': result_search.group('op'),
-			'num1': float(result_search.group('num1')),
-			'num2': float(result_search.group('num2')),
-		}
+		return Result(
+			bin_search.group('bin'),
+			result_search.group('op'),
+			(
+				float(result_search.group('num1')),
+				float(result_search.group('num2')),
+			),
+		)
 	except AttributeError:
 		raise ValueError('Your output does not match requirements.')
 
@@ -72,10 +77,8 @@ class TestConversion(TestCase):
 		operation = 'add'
 
 		test_run = run(num1, num2, operation)
-		num1_actual = test_run['num1']
-		num2_actual = test_run['num2']
 
-		return num1_actual, num2_actual
+		return test_run.nums
 
 	def test_convert_positive_whole(self):
 		num1, num2 = self.get_nums(5, 5)
@@ -119,7 +122,7 @@ class TestConversion(TestCase):
 class TestOperation(TestCase):
 	def get_op(self, operation):
 		num = to_bin(2.5)
-		return run(num, num, operation)['operation']
+		return run(num, num, operation).op
 
 	def test_add(self):
 		self.assertEqual(self.get_op('add'), '+')
@@ -140,7 +143,7 @@ class TestResults(TestCase):
 		num2 = to_bin(num2)
 
 		result = run(num1, num2, op)
-		return result['bin_result']
+		return result.bin
 
 	def test_two_positive_add(self):
 		actual = self.get_bin_result(2.5, 2.5, 'add')
