@@ -16,5 +16,6 @@ $(TARGET) : $(ASM_SRC)
 clean :
 	rm -f *.out *.o
 
+.PHONY: test
 test : $(TARGET)
 	python tests.py ./$(TARGET)
