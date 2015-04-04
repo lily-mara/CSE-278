@@ -11,9 +11,9 @@ BIN_PATTERN = re.compile(r'\w+\s*=\s*(?P<bin>[10]+)')
 OPERATION_PATTERN = re.compile(
 	r"""
 	result.*
-	(?P<num1>-?[0-9]+)\s+
+	(?P<num1>-?[0-9]+\.[0-9]+)\s+
 	(?P<op>[-/*+])\s+
-	(?P<num2>-?[0-9]+)
+	(?P<num2>-?[0-9]+\.[0-9]+)
 	""",
 	re.VERBOSE
 )
