@@ -6,7 +6,7 @@ section .data
 	prompt2: db 'Enter the second number in binary format:',0xA,0	;message printed to users
 	opcode_prompt: db 'Enter the calculation to perform (add, sub, mul, div)',0xA,0
 	fmtScanf: db "%s",0				;scanf format string
-	result_format: db "The result for %d %c %d:",0xA,"binary = %s",0xA,0		;printf format string
+	result_format: db "The result for %f %c %f:",0xA,"binary = %s",0xA,0		;printf format string
 
 	;character codes for operations
 	ADD_C: equ 43
@@ -30,6 +30,9 @@ section .bss
 	;the binary strings converted to numbers
 	number1: resb 4
 	number2: resb 4
+
+	number1_dub: resb 8
+	number2_dub: resb 8
 
 	;the operation that the user indicates
 	op_string: resb 3
@@ -251,10 +254,25 @@ print_result:
 
 	mov eax, [ebp+8]
 
+	;format string order is %f %c %f %s
+	;push result as binary string
 	push eax
-	push dword [number2]
+
+	;push second number
+	fld dword [number2]
+	fstp qword [number2_dub]
+	push dword [number2_dub+4]
+	push dword [number2_dub]
+
+	;push operator character
 	push dword [op_c]
-	push dword [number1]
+
+	;push first number
+	fld dword [number1]
+	fstp qword [number1_dub]
+	push dword [number1_dub+4]
+	push dword [number1_dub]
+
 	push result_format
 
 	call printf
