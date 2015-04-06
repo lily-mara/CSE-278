@@ -9,13 +9,13 @@ section .data
 	result_format: db "The result for %f %c %f:",0xA,"binary = %s",0xA,0		;printf format string
 
 	;character codes for operations
-	ADD_C: equ 43
-	SUB_C: equ 45
-	MUL_C: equ 42
-	DIV_C: equ 47
+	ADD_C: equ '+'
+	SUB_C: equ '-'
+	MUL_C: equ '*'
+	DIV_C: equ '/'
 
-	ONE: equ 49
-	ZERO: equ 48
+	ONE: equ '1'
+	ZERO: equ '0'
 
 	ADD_S: db "add",0
 	SUB_S: db "sub",0
